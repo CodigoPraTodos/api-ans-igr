@@ -7,7 +7,6 @@
 
 import Env from '@ioc:Adonis/Core/Env'
 import { OrmConfig } from '@ioc:Adonis/Lucid/Orm'
-import Application from '@ioc:Adonis/Core/Application'
 import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
 
 const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
@@ -24,49 +23,6 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
   connection: Env.get('DB_CONNECTION', 'sqlite') as string,
 
   connections: {
-    /*
-    |--------------------------------------------------------------------------
-    | Sqlite
-    |--------------------------------------------------------------------------
-    |
-    | Configuration for the Sqlite database.  Make sure to install the driver
-    | from npm when using this connection
-    |
-    | npm i sqlite3
-    |
-    */
-    sqlite: {
-      client: 'sqlite',
-      connection: {
-        filename: Application.tmpPath('db.sqlite3'),
-      },
-      useNullAsDefault: true,
-      healthCheck: false,
-    },
-
-    /*
-    |--------------------------------------------------------------------------
-    | Mysql config
-    |--------------------------------------------------------------------------
-    |
-    | Configuration for Mysql database. Make sure to install the driver
-    | from npm when using this connection
-    |
-    | npm i mysql
-    |
-    */
-    mysql: {
-      client: 'mysql',
-      connection: {
-        host: Env.get('DB_HOST', '127.0.0.1') as string,
-        port: Number(Env.get('DB_PORT', 3306)),
-        user: Env.get('DB_USER', 'lucid') as string,
-        password: Env.get('DB_PASSWORD', 'lucid') as string,
-        database: Env.get('DB_NAME', 'lucid') as string,
-      },
-      healthCheck: false,
-    },
-
     /*
     |--------------------------------------------------------------------------
     | PostgreSQL config
