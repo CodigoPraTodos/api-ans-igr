@@ -29,3 +29,5 @@ Route.get('health', async ({ response }) => {
 Route.get('/', async () => {
   return { hello: 'world' }
 })
+
+Route.get('/instituicoes/:ansId', 'InstituicoesController.getInstituicao')
