@@ -2,6 +2,13 @@
 
 Índice Geral de Reclamações - Agência de Nacional de Saúde Suplementar
 
+Descrição e Fórmulas de Cálculos: http://www.ans.gov.br/planos-de-saude-e-operadoras/informacoes-e-avaliacoes-de-operadoras/indice-de-reclamacoes
+
+Dados: http://www.dados.gov.br/dataset/indice-de-reclamacoes
+
+IGR Corrente (últimos 12 meses de dados): http://www.ans.gov.br/portal/upload/indicedereclamacoes/igr.csv
+IGR Anual desde 2015: http://www.dados.gov.br/dataset/indice-de-reclamacoes/resource/c6332d27-bffe-43bf-a678-7331dffba53f
+
 ## Iniciativa da Comunidade CodigoPraTodos
 
 Porque todos podem acessar dados livres!
@@ -23,7 +30,7 @@ yarn                                          # instala pacotes do node
 cp .env.example .env                          # copia nossas configuracoes de exemplo
 node ace build                                # compila nossos arquivos
 node ace migration:run                        # cria tabelas no banco
-node ace carga:anual ENDERECO_ARQUIVO_CSV     # carrega dados
+node ace carga:anual ENDERECO_ARQUIVO_CSV     # carrega dados (utilize um dos CSVs acima)
 node ace serve --watch                        # inicia servidor
 ```
 
