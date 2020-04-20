@@ -1,7 +1,6 @@
 import { BaseCommand, args } from '@adonisjs/ace'
 import knex from 'knex'
 import { promises as fs } from 'fs'
-// import { ArgTypes } from '@adonisjs/ace/build/src/Contracts'
 
 // todo: fix https://forum.adonisjs.com/t/adonis-5-command-database-ioc-error/6217
 // import Database from '@ioc:Adonis/Lucid/Database'
