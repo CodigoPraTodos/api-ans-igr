@@ -31,3 +31,4 @@ Route.get('/', async () => {
 })
 
 Route.get('/instituicoes/:ansId', 'InstituicoesController.getInstituicao')
+Route.get('/instituicoes', 'InstituicoesController.teste') // todo: remover, apenas teste
