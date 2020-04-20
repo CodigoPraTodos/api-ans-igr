@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+
+  postgres:
+    image: postgres:12.2
+    volumes:
+      - ./.data/.pgsql-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: cpt
+      POSTGRES_PASSWORD: cpt456
+      POSTGRES_DB: api_ans_igr_db
