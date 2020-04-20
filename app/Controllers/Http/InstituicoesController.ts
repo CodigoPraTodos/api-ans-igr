@@ -12,4 +12,11 @@ export default class InstituicoesController {
 
         return instituicao;
     }
+
+    async teste() { // todo: remover esse teste com select *
+        const instituicoes = await Database
+            .from('instituicoes')
+            .select('*')
+        return instituicoes;
+    }
 }

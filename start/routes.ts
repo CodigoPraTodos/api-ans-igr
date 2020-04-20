@@ -27,7 +27,8 @@ Route.get('health', async ({ response }) => {
 })
 
 Route.get('/', async () => {
-  return { hello: 'world' }
+  return { info: 'https://github.com/CodigoPraTodos/api-ans-igr' }
 })
 
 Route.get('/instituicoes/:ansId', 'InstituicoesController.getInstituicao')
+Route.get('/instituicoes', 'InstituicoesController.teste') // todo: remover, apenas teste
