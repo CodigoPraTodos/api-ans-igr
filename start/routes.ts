@@ -18,34 +18,40 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
-import HealthCheck from '@ioc:Adonis/Core/HealthCheck'
+import Route from "@ioc:Adonis/Core/Route";
+import HealthCheck from "@ioc:Adonis/Core/HealthCheck";
 
-Route.get('health', async ({ response }) => {
-  const report = await HealthCheck.getReport()
-  return report.healthy ? response.ok(report) : response.badRequest(report)
-})
+Route.get("health", async ({ response }) => {
+  const report = await HealthCheck.getReport();
+  return report.healthy ? response.ok(report) : response.badRequest(report);
+});
 
-Route.get('/', async () => {
-  return { info: 'https://github.com/CodigoPraTodos/api-ans-igr' }
-})
+Route.get("/", async () => {
+  return { info: "https://github.com/CodigoPraTodos/api-ans-igr" };
+});
 
-Route
-  .group(() => {
-    Route.get('/instituicoes', 'InstituicoesController.teste') // todo: remover, apenas teste
-
-    Route
-      .group(() => {
-        Route.get('/pesquisa/:query', 'InstituicoesController.searchInstituicoesPorNome')
-        Route.get('/pesquisa/cobertura/:query', 'InstituicoesController.searchInstituicoesPorCobertura')
-        Route.get('/pesquisa/porte/:query', 'InstituicoesController.searchInstituicoesPorPorte')
-        Route.get('/:ansId', 'InstituicoesController.getInstituicao')
-        Route.get('/lista/:ansIds', 'InstituicoesController.getInstituicaoLista')
-        Route.get('/:ansId/classificacoes', 'ClassificacoesController.getClassificacoes')
-        Route.get('/:ansId/classificacoes/:ano', 'ClassificacoesController.getClassificacoesAno')
-        Route.get('/:ansId/classificacoes/:ano/:mes', 'ClassificacoesController.getClassificacoesMes')
-      })
-      .prefix('instituicoes')
-
-  })
-  .prefix('v1')
+Route.group(() => {
+  Route.group(() => {
+    Route.get("/", "InstituicoesController.getInstituicaoRoot");
+    Route.get(
+      "/pesquisa/nome/:query",
+      "InstituicoesController.searchInstituicoesPorNome"
+    );
+    Route.get(
+      "/pesquisa/porte/:query",
+      "InstituicoesController.searchInstituicoesPorPorte"
+    );
+    Route.get(
+      "/pesquisa/cobertura/:query",
+      "InstituicoesController.searchInstituicoesPorCobertura"
+    );
+    Route.get("/lista/:ansIds", "InstituicoesController.getInstituicaoLista");
+    Route.get("/:ansId", "InstituicoesController.getInstituicao");
+    // Route.get(
+    //   "/:ansId/classificacoes",
+    //   "ClassificacoesController.getClassificacoes"
+    // );
+    Route.get("/:ansId/:ano", "InstituicoesController.getInstituicaoAno");
+    Route.get("/:ansId/:ano/:mes", "InstituicoesController.getInstituicaoMes");
+  }).prefix("instituicoes");
+}).prefix("v1");
