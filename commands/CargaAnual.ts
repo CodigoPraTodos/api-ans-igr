@@ -3,21 +3,23 @@ import knex from 'knex'
 import csvParse from 'csv-parse/lib/sync'
 import { promises as fs } from 'fs'
 import { ColumnOption } from 'csv-parse'
+require('dotenv').config()
 
 // todo: fix https://forum.adonisjs.com/t/adonis-5-command-database-ioc-error/6217
 // import Database from '@ioc:Adonis/Lucid/Database'
 const DB_CONFIG = {
-  client: 'pg',
+  client: process.env.DB_CONNECTION,
   connection: {
-    host: '127.0.0.1',
-    port: 5432,
-    user: 'cpt',
-    password: 'cpt456',
-    database: 'api_ans_igr_db',
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT || 5432),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
   },
 }
 
-const CARGA_MAX_REGISTROS = 500
+const CARGA_MAX_REGISTROS = 999999999
+const BATCH_SIZE = 200
 const CSV_ENCODING = 'latin1'
 
 interface Instituicao {
@@ -62,12 +64,20 @@ export default class CargaAnual extends BaseCommand {
     const instituicoes = dados.slice(0, CARGA_MAX_REGISTROS).map(converteInstituicao)
 
     // TODO: inject database
-    const db = knex(DB_CONFIG)
-    const resultado = await db
-      .table('instituicoes')
-      .insert(instituicoes)
+    const db = knex(DB_CONFIG);
+    let i = 0;
+    let batch: Instituicao[] = [];
+    for (const instituicao of instituicoes) {
+      batch.push(instituicao);
+      i++;
+      if (i % BATCH_SIZE === 0 || i === instituicoes.length) {
+        await db.raw(db.table('instituicoes').insert(batch).toQuery()
+          + ' ON CONFLICT DO NOTHING;');
+        batch = [];
+      }
+    }
 
-    this.logger.info('dados inseridos >> ', JSON.stringify(resultado))
+    this.logger.info('Registros inseridos:', i.toString());
   }
 
   private async carregaCsv(): Promise<ObjetoCsv[]> {
@@ -130,7 +140,6 @@ function converteInstituicao(objetoCsv: ObjetoCsv): Instituicao {
     cobertura: objetoCsv.cobertura,
     porte: objetoCsv.porte,
   };
-  console.info('inserindo > ', JSON.stringify(instituicao))
 
   return (instituicao)
 }
