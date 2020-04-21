@@ -30,5 +30,22 @@ Route.get('/', async () => {
   return { info: 'https://github.com/CodigoPraTodos/api-ans-igr' }
 })
 
-Route.get('/instituicoes/:ansId', 'InstituicoesController.getInstituicao')
-Route.get('/instituicoes', 'InstituicoesController.teste') // todo: remover, apenas teste
+Route
+  .group(() => {
+    Route.get('/instituicoes', 'InstituicoesController.teste') // todo: remover, apenas teste
+
+    Route
+      .group(() => {
+        Route.get('/pesquisa/:query', 'InstituicoesController.searchInstituicoesPorNome')
+        Route.get('/pesquisa/cobertura/:query', 'InstituicoesController.searchInstituicoesPorCobertura')
+        Route.get('/pesquisa/porte/:query', 'InstituicoesController.searchInstituicoesPorPorte')
+        Route.get('/:ansId', 'InstituicoesController.getInstituicao')
+        Route.get('/lista/:ansIds', 'InstituicoesController.getInstituicaoLista')
+        Route.get('/:ansId/classificacoes', 'ClassificacoesController.getClassificacoes')
+        Route.get('/:ansId/classificacoes/:ano', 'ClassificacoesController.getClassificacoesAno')
+        Route.get('/:ansId/classificacoes/:ano/:mes', 'ClassificacoesController.getClassificacoesMes')
+      })
+      .prefix('instituicoes')
+
+  })
+  .prefix('v1')
