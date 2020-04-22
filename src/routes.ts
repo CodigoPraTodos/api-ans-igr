@@ -12,17 +12,8 @@ router.get("/v1/instituicoes/pesquisa/nome/:query", instituicoesController.searc
 router.get("/v1/instituicoes/pesquisa/porte/:query", instituicoesController.searchInstituicoesPorPorte);
 router.get("/v1/instituicoes/pesquisa/cobertura/:query", instituicoesController.searchInstituicoesPorCobertura);
 router.get("/v1/instituicoes/lista/:ansIds", instituicoesController.getInstituicaoLista);
+router.get("/v1/instituicoes/:ansId/:ano", instituicoesController.getInstituicaoAno);
+router.get("/v1/instituicoes/:ansId/:ano/:mes", instituicoesController.getInstituicaoAnoMes);
 router.get("/v1/instituicoes/:ansId", instituicoesController.getInstituicao);
 
 export default router;
-
-// Route.group(() => {
-//   Route.group(() => {
-//     // Route.get(
-//     //   "/:ansId/classificacoes",
-//     //   "ClassificacoesController.getClassificacoes"
-//     // );
-//     Route.get("/:ansId/:ano", "InstituicoesController.getInstituicaoAno");
-//     Route.get("/:ansId/:ano/:mes", "InstituicoesController.getInstituicaoMes");
-//   }).prefix("instituicoes");
-// }).prefix("v1");

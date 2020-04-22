@@ -20,16 +20,16 @@ export const selecionaIndices = async (
         return i.ans_id;
     });
 
-    let sqlQuery: string = `
-    select indices.ans_id, indices.ano, indices.mes, indices.classificacao, indices.indice
-      from instituicoes, lateral (
-          select ans_id, ano, mes, classificacao, indice from indices
-              where indices.ans_id = instituicoes.ans_id
-              order by ano desc, mes desc
-              limit ${limite}
-      ) indices
-      where instituicoes.ans_id in (${ans_ids})
-`;
+    let sqlQuery = `
+        select indices.ans_id, indices.ano, indices.mes, indices.classificacao, indices.indice
+        from instituicoes, lateral (
+            select ans_id, ano, mes, classificacao, indice from indices
+                where indices.ans_id = instituicoes.ans_id
+                order by ano desc, mes desc
+                limit ${limite}
+        ) indices
+        where instituicoes.ans_id in (${ans_ids})
+    `;
 
     if (ano) {
         sqlQuery += ` and indices.ano = ${ano}`;

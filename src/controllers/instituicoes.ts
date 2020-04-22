@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { Instituicao, Indice, selecionaIndices, selecionaInstituicoes, searchInstituicoes } from "../model";
 import { ApiResponse, ResponseLinks, createLink, ApiEntity } from "./api";
+import config from "src/config";
 
 interface IndiceApi {
     ano: number;
@@ -20,7 +21,7 @@ interface InstituicaoApi {
 
 const LIMITE_DEFAULT_INDICES = 12;
 const LIMITE_DEFAULT_INSTITUICOES = 10;
-const ENDPOINT = "http://localhost:3333/v1/instituicoes/";
+const ENDPOINT = `http://${config.app.host}:${config.app.port}/v1/instituicoes/`;
 
 const buildResponseInstituicao = (instituicoes: Instituicao[], indices: Indice[]): ApiResponse<InstituicaoApi> => {
     const mapIndice = (indice: Indice): IndiceApi => ({
@@ -60,6 +61,23 @@ export const getInstituicao = async (req: Request<{ ansId: string }>, res: Respo
     res.send(buildResponseInstituicao(instituicoes, indices));
 };
 
+export const getInstituicaoAno = async (req: Request<{ ansId: string; ano: string }>, res: Response): Promise<void> => {
+    const { ansId, ano } = req.params;
+    const instituicoes = await selecionaInstituicoes(1, [parseInt(ansId)]);
+    const indices = await selecionaIndices(instituicoes, LIMITE_DEFAULT_INDICES, parseInt(ano));
+    res.send(buildResponseInstituicao(instituicoes, indices));
+};
+
+export const getInstituicaoAnoMes = async (
+    req: Request<{ ansId: string; ano: string; mes: string }>,
+    res: Response,
+): Promise<void> => {
+    const { ansId, ano, mes } = req.params;
+    const instituicoes = await selecionaInstituicoes(1, [parseInt(ansId)]);
+    const indices = await selecionaIndices(instituicoes, LIMITE_DEFAULT_INDICES, parseInt(ano), parseInt(mes));
+    res.send(buildResponseInstituicao(instituicoes, indices));
+};
+
 export const getInstituicaoLista = async (req: Request<{ ansIds: string }>, res: Response): Promise<void> => {
     const ansIds = req.params.ansIds.split(",").map((i) => parseInt(i));
     const instituicoes = await selecionaInstituicoes(LIMITE_DEFAULT_INSTITUICOES, ansIds);
@@ -84,33 +102,3 @@ export const searchInstituicoesPorCobertura = async (req: Request, res: Response
     const indices = await selecionaIndices(instituicoes, LIMITE_DEFAULT_INDICES);
     res.send(buildResponseInstituicao(instituicoes, indices));
 };
-
-// async searchInstituicoesPorPorte({ params }) {
-//     return this.searchInstituicoes("porte", params.query);
-// }
-
-// async searchInstituicoesPorCobertura({ params }) {
-//     return this.searchInstituicoes("cobertura", params.query);
-// }
-
-// async getInstituicaoAno({ params }) {
-//     const instituicoes: InstituicaoDb[] = await Database.from("instituicoes")
-//         .select("ans_id", "nome", "cobertura", "porte")
-//         .where("ans_id", params.ansId)
-//         .orderBy("ans_id", "asc");
-
-//     const indices = await this.selecionaIndices(instituicoes, LIMITE_DEFAULT_INDICES, params.ano);
-
-//     return this.buildResponseInstituicao(instituicoes, indices);
-// }
-
-// async getInstituicaoMes({ params }) {
-//     const instituicoes: InstituicaoDb[] = await Database.from("instituicoes")
-//         .select("ans_id", "nome", "cobertura", "porte")
-//         .where("ans_id", params.ansId)
-//         .orderBy("ans_id", "asc");
-
-//     const indices = await this.selecionaIndices(instituicoes, LIMITE_DEFAULT_INDICES, params.ano, params.mes);
-
-//     return this.buildResponseInstituicao(instituicoes, indices);
-// }
