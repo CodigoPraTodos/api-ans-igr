@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 
-import { Instituicao, Indice, selecionaIndices, selecionaInstituicoes } from "../model";
-import { ApiResponse, ResponseLinks, createLink } from "./api";
+import { Instituicao, Indice, selecionaIndices, selecionaInstituicoes, searchInstituicoes } from "../model";
+import { ApiResponse, ResponseLinks, createLink, ApiEntity } from "./api";
 
 interface IndiceApi {
-    ano: Number;
-    mes: Number;
-    classificacao: Number;
-    indice: Number;
+    ano: number;
+    mes: number;
+    classificacao: number;
+    indice: number;
     links: ResponseLinks;
 }
 
@@ -23,7 +23,7 @@ const LIMITE_DEFAULT_INSTITUICOES = 10;
 const ENDPOINT = "http://localhost:3333/v1/instituicoes/";
 
 const buildResponseInstituicao = (instituicoes: Instituicao[], indices: Indice[]): ApiResponse<InstituicaoApi> => {
-    const mapIndice = (indice: Indice) => ({
+    const mapIndice = (indice: Indice): IndiceApi => ({
         ano: indice.ano,
         mes: indice.mes,
         classificacao: indice.classificacao,
@@ -31,7 +31,7 @@ const buildResponseInstituicao = (instituicoes: Instituicao[], indices: Indice[]
         links: createLink(ENDPOINT + indice.ans_id + "/" + indice.ano + "/" + indice.mes),
     });
 
-    const mapInstituicao = (instituicao: Instituicao) => ({
+    const mapInstituicao = (instituicao: Instituicao): ApiEntity<InstituicaoApi> => ({
         type: "instituicao",
         id: instituicao.ans_id,
         attributes: {
@@ -67,9 +67,23 @@ export const getInstituicaoLista = async (req: Request<{ ansIds: string }>, res:
     res.send(buildResponseInstituicao(instituicoes, indices));
 };
 
-// async searchInstituicoesPorNome({ params }) {
-//     return this.searchInstituicoes("nome", params.query);
-// }
+export const searchInstituicoesPorNome = async (req: Request, res: Response): Promise<void> => {
+    const instituicoes = await searchInstituicoes(LIMITE_DEFAULT_INSTITUICOES, "nome", req.params.query);
+    const indices = await selecionaIndices(instituicoes, LIMITE_DEFAULT_INDICES);
+    res.send(buildResponseInstituicao(instituicoes, indices));
+};
+
+export const searchInstituicoesPorPorte = async (req: Request, res: Response): Promise<void> => {
+    const instituicoes = await searchInstituicoes(LIMITE_DEFAULT_INSTITUICOES, "porte", req.params.query);
+    const indices = await selecionaIndices(instituicoes, LIMITE_DEFAULT_INDICES);
+    res.send(buildResponseInstituicao(instituicoes, indices));
+};
+
+export const searchInstituicoesPorCobertura = async (req: Request, res: Response): Promise<void> => {
+    const instituicoes = await searchInstituicoes(LIMITE_DEFAULT_INSTITUICOES, "cobertura", req.params.query);
+    const indices = await selecionaIndices(instituicoes, LIMITE_DEFAULT_INDICES);
+    res.send(buildResponseInstituicao(instituicoes, indices));
+};
 
 // async searchInstituicoesPorPorte({ params }) {
 //     return this.searchInstituicoes("porte", params.query);
@@ -97,20 +111,6 @@ export const getInstituicaoLista = async (req: Request<{ ansIds: string }>, res:
 //         .orderBy("ans_id", "asc");
 
 //     const indices = await this.selecionaIndices(instituicoes, LIMITE_DEFAULT_INDICES, params.ano, params.mes);
-
-//     return this.buildResponseInstituicao(instituicoes, indices);
-// }
-
-// async searchInstituicoes(campo: string, query: string) {
-//     let queryLike = addWildcard(query, "%");
-
-//     const instituicoes: InstituicaoDb[] = await Database.from("instituicoes")
-//         .select("ans_id", "nome", "cobertura", "porte")
-//         .whereRaw(`UPPER(UNACCENT(${campo})) like UPPER(UNACCENT(?))`, [queryLike])
-//         .orderBy("ans_id", "asc")
-//         .limit(LIMITE_DEFAULT_INSTITUICOES);
-
-//     const indices = await this.selecionaIndices(instituicoes, LIMITE_DEFAULT_INDICES);
 
 //     return this.buildResponseInstituicao(instituicoes, indices);
 // }
