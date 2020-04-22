@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import { Instituicao, Indice, selecionaIndices, selecionaInstituicoes, searchInstituicoes } from "../model";
 import { ApiResponse, ResponseLinks, createLink, ApiEntity } from "./api";
-import config from "src/config";
+import config from "../config";
 
 interface IndiceApi {
     ano: number;
