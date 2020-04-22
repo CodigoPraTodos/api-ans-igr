@@ -12,8 +12,8 @@
         "prettier:base": "prettier --parser typescript --single-quote",
         "prettier:check": "npm run prettier:base -- --list-different \"src/**/*.{ts,tsx}\"",
         "prettier:write": "npm run prettier:base -- --write \"src/**/*.{ts,tsx}\"",
-        "db:migrate": "knex migrate:latest --knexfile=knexfile.ts --verbose",
-        "db:rollback": "knex migrate:rollback --knexfile=knexfile.ts --verbose",
+        "migration:run": "knex migrate:latest --knexfile=knexfile.ts --verbose",
+        "migration:rollback": "knex migrate:rollback --knexfile=knexfile.ts --verbose",
         "make:migration": "knex migrate:make --knexfile=knexfile.ts -x ts",
         "cmd:carga": "ts-node src/cmd/carga.ts"
     },

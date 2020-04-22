@@ -7,11 +7,18 @@ import { InstituicaoIndices, carregaInstituicoes } from "../services/instituicoe
 
 const cmdArgs = process.argv.slice(2);
 if (cmdArgs.length < 1) {
-    throw new Error("Argumentos inválidos: <arquivo>");
+    throw new Error("Argumentos inválidos: <arquivo> [--anual]");
 }
 
 const ARQUIVO = cmdArgs[0];
-const CARGA_ANUAL = cmdArgs.length > 1 ? cmdArgs[1] : false;
+
+const CARGA_ANUAL = cmdArgs.length > 1 && cmdArgs[1] === "--anual";
+if (CARGA_ANUAL) {
+    console.info(">>> Efetuando Carga ANUAL");
+} else {
+    console.info(">>> Carga de IGR corrente");
+}
+
 const CSV_ENCODING = "latin1";
 
 interface ObjetoCsv {
