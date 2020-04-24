@@ -23,6 +23,15 @@ const LIMITE_DEFAULT_INDICES = 12;
 const LIMITE_DEFAULT_INSTITUICOES = 10;
 const ENDPOINT = `http://${config.app.host}:${config.app.port}/v1/instituicoes/`;
 
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      InstituicoesApi:
+ *        type: array
+ *        items:
+ *          $ref: '#/components/schemas/Instituicao'
+ */
 const buildResponseInstituicao = (instituicoes: Instituicao[], indices: Indice[]): ApiResponse<InstituicaoApi> => {
     const mapIndice = (indice: Indice): IndiceApi => ({
         ano: indice.ano,
