@@ -1,6 +1,36 @@
 import db from "../knex";
 import { addWildcard } from "../utils/uri";
 
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      Instituicao:
+ *        type: object
+ *        required:
+ *          - ans_id
+ *          - nome
+ *          - cobertura
+ *          - porte
+ *        properties:
+ *          ans_id:
+ *            type: integer
+ *            description: Codigo ANS
+ *          nome:
+ *            type: string
+ *            description: Nome da instituicao
+ *          cobertura:
+ *            type: string
+ *            description: Cobertura do plano
+ *          porte:
+ *            type: string
+ *            description: Tamanho do plano
+ *        example:
+ *           ans_id: 12345
+ *           nome: Plano de Saúde CPT
+ *           cobertura: Odontológica
+ *           porte: Pequeno
+ */
 export interface Instituicao {
     ans_id: number;
     nome: string;
